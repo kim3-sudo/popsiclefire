@@ -1,0 +1,32 @@
+---
+title: "Accelerating Burn Speed of Birch Wood Popsicle Sticks"
+author: "E. Croffoot-Suede, S. Kim"
+date: "4/25/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+## Methods
+
+### Data Description
+
+The population under study consists of a sample of popsicle sticks made of birch wood. We cannot guarantee the randomness of the popsicle sticks out of the population of popsicle sticks that exist in the world (this would be impossible without exorbitant costs), but because of the relative similarity between popsicle sticks and consistency in runs, we believe that our experiment results will generalize to similar popsicle sticks, especially other sticks from the same package.
+
+### Steps
+
+A two-way analysis of variance was run on the data.
+
+### Statistical Analysis
+
+Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). Analysis of variance tests were run using the `stats` package in R. Half-normal probability plots were generated using the `daewr` package in R. The statistical significance level used in all analyses used $\alpha = 0.10$.
+
+## Analysis
+
+## Discussion
+
+## Conclusion
