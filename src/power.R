@@ -10,7 +10,7 @@ library(pwr2)
 pwr.t.test(d = 1, sig.level = 0.05, power = 0.9, type = "two.sample", alternative = "two.sided")
 
 ## 1 way power for each factor, then take the larger one
-ss.1way(k = 3, alpha = 0.05, beta = 0.1, f = 1, B = 100) # Liquids
+ss.1way(k = 4, alpha = 0.05, beta = 0.1, f = 1, B = 100) # Liquids
 ss.1way(k = 6, alpha = 0.05, beta = 0.1, f = 1, B = 100) # Trial run
 # Let's use total sample of 24, since it's the larger n*k
 
