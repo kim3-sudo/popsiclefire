@@ -1,3 +1,8 @@
+# power.R
+# E. Croffoot-Suede, S. Kim
+# Popsicle Fire
+# Power calculations for determining adequate sample size
+
 library(pwr)
 library(pwr2)
 
