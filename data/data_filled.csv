@@ -1,0 +1,25 @@
+,run,type,distance (ml)
+0,1,isopropyl,90
+1,1,acetone,68
+2,1,ethanol,112
+3,1,acetone,93
+4,2,ethanol,112
+5,2,dry,96
+6,2,acetone,91
+7,2,ethanol,106
+8,3,ethanol,107
+9,3,isopropyl,99
+10,3,isopropyl,92
+11,3,dry,100
+12,4,isopropyl,78
+13,4,ethanol,100
+14,4,acetone,97
+15,4,isopropyl,80
+16,5,ethanol,94
+17,5,acetone,45
+18,5,dry,92
+19,5,acetone,97
+20,6,dry,80
+21,6,isopropyl,86
+22,6,dry,86
+23,6,dry,90
