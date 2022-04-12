@@ -5,7 +5,7 @@
 Use `data_filled.csv` in R by using the line:
 
 ```R
-fire <- read.csv(url("https://raw.githubusercontent.com/kim3-sudo/popsiclefire/main/data/data_filled.csv"))
+fire <- read.csv(url("https://raw.githubusercontent.com/kim3-sudo/popsiclefire/main/data/data_filled.csv"), row.names = 1)
 ```
 
 ## Columns
