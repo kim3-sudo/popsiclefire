@@ -16,4 +16,10 @@ anova(fire.mod.null, fire.mod.full)
 plot(fire.mod.full, which = 1:2)
 
 # Friedman's test!
-friedman.test(fire$distance, fire$type, fire$run)
+library(NSM3)
+pSkilMack(fire$distance, b = as.factor(fire$run), trt = fire$type)
+
+# for shits n giggles
+kruskal.test(fire$distance, fire$type)
+pSDCFlig(fire$distance, g = as.factor(fire$type))
+

@@ -8,6 +8,7 @@ fire <- read.csv(url("https://raw.githubusercontent.com/kim3-sudo/popsiclefire/m
 boxplot(fire$distance)
 
 boxplot(distance ~ type, data = fire)
+boxplot(distance ~ run, data = fire)
 
 interaction.plot(fire$type, fire$run, fire$distance)
 interaction.plot(fire$run, fire$type, fire$distance)
