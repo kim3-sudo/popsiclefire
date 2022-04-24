@@ -51,6 +51,8 @@ for (i in 0:1000) {
   sim.iso.dry <- c(sim.iso.dry, wilcox.test(distance ~ accelerant, data = subset(rand.df, accelerant == 'isopropyl' | accelerant == 'dry'))[['statistic']])
 }
 differences <- data.frame(sim.eth.dry, sim.eth.ace, sim.eth.iso, sim.ace.dry, sim.ace.iso, sim.iso.dry)
+boxplot(differences, xlab="Simulated Pairwise Comparisons", ylab="Mann-Whitney U Statistic", 
+        main="Collected Test Statistic from 1000 Simulated Pairwise Comparisons")
 
 # Compare randomized accelerant (treatment) Mann-Whitney-Wilcoxon tests against pairwise comparisons from the actual dataset
 actual.wilcox <- c()
