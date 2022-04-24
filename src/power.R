@@ -10,4 +10,3 @@ library(pwr2)
 ss.1way(k = 4, alpha = 0.05, beta = 0.1, f = 1, B = 100) # Liquids
 ss.1way(k = 6, alpha = 0.05, beta = 0.1, f = 1, B = 100) # Trial run
 # Let's use total sample of 24, since it's the larger n*k
-
