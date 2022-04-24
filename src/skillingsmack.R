@@ -31,7 +31,7 @@ distance <- fire$distance
 
 # "Hartlaub-Leatherman" Pairwise Multiple Comparisons Procedure for Data from an Arbitrary Incomplete Block Design
 # Make a vector for each of the pairwise comparisons
-sim.accelerant.d <- c()
+sim.accelerant <- c()
 sim.eth.dry <- c()
 sim.eth.ace <- c()
 sim.eth.iso <- c()
