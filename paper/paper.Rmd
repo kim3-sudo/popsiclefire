@@ -2,16 +2,41 @@
 title: "Accelerating Burn Speed of Birch Wood Popsicle Sticks"
 author: "E. Croffoot-Suede, S. Kim"
 date: "4/25/2022"
-output: pdf_document
+output:
+  pdf_document:
+    pandoc_args: --listings
+    includes:
+      in_header: preamble.tex
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+fire <- read.csv(url("https://raw.githubusercontent.com/kim3-sudo/popsiclefire/main/data/data_filled.csv"))
 ```
 
 ## Introduction
 
+There's a popular idea that dousing something in gasoline will make it burn, but is this premise actually true? Is it possible to douse an object in a flammable liquid so that it will burn faster? To test this, we chose to light popsicle sticks on fire under four different treatments: dry (no accelerant applied), soaked in 75.5% ethanol alcohol, soaked in 91% isopropyl alcohol, and soaked in 100% acetone. We chose these because they were the highest purity of each liquid accelerant we could find.
+
+Both ethanol alcohol and isopropyl alcohol are from the alcohol family of volatile liquids. Common uses for ethanol alcohol are in alcoholic beverages, since ethanol is a byproduct of fermentation of many organic compounds. Common uses for isopropyl alcohol are as a detergent or as an antiseptic in first-aid. Our source for the ethanol alcohol was in Galen's 151-proof^[Proof is a measure of alcohol content by volume, corresponding to twice the percentage of alcohol by volume. So, a 100-proof spirit contains 50% alcohol by volume.] charcoal filtered vodka, which was distilled from grain neutral spirits. Our source for the isopropyl alcohol was in a 91:9 diluted solution of isopropyl alcohol to water, distributed and sold by Kroger. The vodka was the highest proof available, and the isopropyl alcohol was the most concentrated solution available.
+
+Conversely, acetone is from the ketone family of volatile liquids. Common uses for acetone are as a solvent (such as in nail-polish remover), and it also breaks down hydrocarbons. The acetone was reported to be 100% pure acetone, sold as nail polish remover. However, it also contained a bittering agent (likely to dissuade children from drinking it). The acetone was distributed and sold also by Kroger.
+
+Curiously, all three solutions had warnings on the bottles warning of the flammability of each liquid, which bode well for our hypothesis that soaking objects in them would increase that object's flammability.
+
 ## Methods
+
+### Experiment Setup
+
+For the experiment, we used birch wood popsicle sticks. We also needed our treatments, which were the ethanol alcohol, isopropyl alcohol, acetone, and no accelerant. To hold the burning sticks off the ground (so they could be lit from below - flames rise), we used four mason jars, one for each stick within a block. To light the sticks, we used a barbeque lighter, and for timing, we used an Apple iPhone. For safety purposes, we also had extra water.
+
+We began by randomly assigning four treatments to each block using Python. We then filled plates with 100 milliliters of each of the three liquid accelerants, as well as drawing a line on the popsicle sticks at 90 millimeters. The line at 90 millimeters would indicate where the stick should be placed on the plate.
+
+For each block, we dipped the popsicle sticks in the indicated accelerant-filled plates based on the assigned treatments for two minutes. After two minutes passed, we took the sticks out and put them on the mason jars so they were elevated. We then lit the end of the popsicle stick that was soaked in the accelerant on fire, holding the lighter for 10 seconds on each popsicle stick. The lighter was held approximately one inch away from the end of the popsicle stick angled from the bottom up so the flame would rise toward the stick. We then watched all four sticks burn until they all burnt out, then measured the distance from the unburnt end of each popsicle stick to the closest burn line, logging that as "distance" to indicate how much of the stick is left **unburnt**, in millimeters.
+
+### Hypotheses
+
+PUT SOME HYPOTHESES HERE!
 
 ### Data Description
 
@@ -19,14 +44,69 @@ The population under study consists of a sample of popsicle sticks made of birch
 
 ### Steps
 
-A two-way analysis of variance was run on the data.
+To ensure that we could find statistically significant results, we ran a power calculation. We assumed that we would use six time blocks, and we chose an alpha level for this of $\alpha = 0.05$, which is the probability of a Type I error (false rejection). We chose a Type II error probability of 0.1. Based on this, we calculated $N = 24$, meaning that we should use 6 blocks of 4 observations each. MAKE SURE TO THROW IN MORE INFO ON TAKING THE BIGGER N HERE!
 
 ### Statistical Analysis
 
-Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). Analysis of variance tests were run using the `stats` package in R. Half-normal probability plots were generated using the `daewr` package in R. The statistical significance level used in all analyses used $\alpha = 0.10$.
+Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). The Skillings-Mack procedure was run in R using the NSM3 package version 1.16. The Wilcoxon rank-sum tests were run using the stats package in R.
 
 ## Analysis
 
+Because of its higher relative asymptotic efficiency, we began by running an analysis of variance on the data. We believe that the independence condition is met because each popsicle stick should not affect another popsicle stick during the burn. However, when we checked the conditions for an analysis of variance, we found that equal variance condition and the normality condition were not met for a parametric test.
+
+```{R normality, fig.show="hold", out.width="50%", fig.height = 5, echo = FALSE}
+plot(aov(distance ~ type * run, data = fire), which = 1, main = "Figure 1: Residuals vs Fitted")
+plot(aov(distance ~ type * run, data = fire), which = 2, main = "Figure 2: Normal Q-Q")
+```
+
+In Figure 1, it is clear that there is a serious issue with the equal variance condition. There is a distinct "funnel" shape from left to right, where the variance at the fitted values around 80 to 90 are much larger than the variance at 105 to 110.
+
+In Figure 2, there are flaired tails that indicate an overdispersed data distribution compared to a normal distribution. That is the distribution was "squished" toward the center compared to the normal distribution.
+
+We attempted to fix the data shape using a data transformation, including the $y^2$, $y^3$, $\sqrt{y}$, and $\ln{y}$ transformations. However, none of these transformations changed the data enough to change the dispersion or the shape of the distribution to be more normal. Instead, we chose to use a non-parametric method instead. For the type of data, we chose to use the Skillings-Mack procedure. The Skillings-Mack procedure is a distribution free test for general alternatives for data from an arbitrary incomplete block design. This means that it can be used where there are missing observations in a single block. Its parametric cousin is the two-way ANOVA, and it can be used as a proxy for an overall F-test where the conditions are not met and the data are from an arbitrary incomplete block design.
+
+When we ran the Skillings-Mack procedure, we found an asymptotic upper-tail probability of $0.0536 < 0.1 = \alpha$, and a Skillings-Mack SM test statistic of 7.6587 on 3 degrees of freedom. Given this, we concluded that there is a difference in at least one of the groups.
+
+In order to find which groups have a significant difference, we need to use an associated pairwise comparison procedure that can also be used against arbitrary incomplete block designs. To determine this, we created a new pairwise multiple comparisons procedure that can be used on arbitrary incomplete block designs.
+
+1. Run a Wilcoxon rank-sum test on the data for all $6 = {4\choose2}$ treatment pairwise comparisons.
+2. Keep the block and response values together, but randomly assign a new treatment for each observation, then calculate the Wilcoxon rank sum for all $6 = {4\choose2}$ treatment pairwise comparisons. This will spread the block effect across all treatments. Repeat this $r$ times, and store each of the pairwise comparisons for each of these tests.
+3. For each of the six pairwise comparisons groups, compare the \nth{5} and \nth{95} percentiles of the $r$ simulated random-treatment Wilcoxon rank-sum test statistics against the test statistic from each of the pairwise Wilcoxon tests from the actual data. If the actual Wilcoxon rank-sum test statistic falls inside of the (0.05, 0.95) percentile from the random-treatment distribution, there is a significant difference between the two groups.
+
+This procedure is used to determine that given two groups (in this case, each pair of treatments), is there strong statistical evidence to support the hypothesis that one of the groups is significantly different from the other? Because we are using a nonparametric method, we are comparing the medians. This diminishes the effect of using non-normal data. The Wilcoxon rank-sum test calculates distance from the medians using the sum of the rank, not the actual value's difference from the median, which also helps to diminish the effect of extraordinarily large or small outliers.
+
+We chose $r = 1000$ to ensure that we created a suitable distribution of random-treatment test statistics to compare the actual test statistics against.
+
+## Results
+
+We got the following comparisons table, which contains the cutoff values at an $\alpha$ level of 0.1.^[We use the \nth{5} and \nth{95} percentiles because these are the $\alpha/2$ levels.] This is essentially a method to calculate the distance from the median and tell whether there is a significant difference between two groups.
+
+| Comparison        | Actual | Medians of Simulated U’s | \nth{5} Percentile | \nth{95} Percentile |
+|-------------------|--------|--------------------------|----------------|-----------------|
+| Ethanol-Dry       | 2.5    | 18.5                     | 8.0            | 28.5            |
+| Ethanol-Acetone   | 2.0    | 18.0                     | 7.5            | 28.5            |
+| Ethanol-Isopropyl | 35.0   | 18.0                     | 8.0            | 27.5            |
+| Acetone-Dry       | 17.0   | 17.5                     | 7.0            | 28.5            |
+| Acetone-Isopropyl | 19.0   | 18.0                     | 7.0            | 28.5            |
+| Isopropyl-Dry     | 23.0   | 18.0                     | 7.0            | 28.0            |
+
+Table: Comparisons Table
+
+In Table 1, we found that the simulated U's are not statistically different from the actual U's for the acetone-dry, acetone-isopropyl, and isopropyl-dry combinations. This means that there is no statistically significant difference between the results for isopropyl alcohol, acetone, and no accelerant.
+
+Based on this information, we generated a boxplot of just the unburnt distance by accelerant.
+
+```{r boxplot, echo = FALSE}
+boxplot(distance ~ type, data = fire, ylab="Distance (mm)", 
+        xlab="Accelerant", main="Figure 3: Unburnt Distance by Accelerant")
+```
+
+We see that acetone has the lowest box by distance, so we would like to take acetone or anything in acetone's group as calculated by the multiple comparisons procedure.
+
 ## Discussion
 
+
+
 ## Conclusion
+
+Our goal is to maximize the amount burnt, so the metric for success is to minimize the unburnt distance. We saw in the boxplot from Figure 3 that the best way to decrease unburnt distance is to use acetone. Table 1 tells us that there was no significant difference between acetone, dry, or isopropyl alcohol. Therefore, we recommend that to maximize the amount burnt, to soak birch popsicle sticks in acetone, isoproply alcohol, or no accelerant at all.
