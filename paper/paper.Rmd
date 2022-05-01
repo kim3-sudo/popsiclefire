@@ -8,6 +8,9 @@ output:
     includes:
       before_body: title.sty
       in_header: preamble.tex
+bibliography: citations.bib
+csl: american-statistical-association.csl
+nocite: '@*'
 ---
 
 ```{r setup, include=FALSE}
@@ -112,7 +115,7 @@ when $c_{ij} \equiv 1$, for $i = 1, 2, 3, 4$ and $j = 1, 2, 3, 4, 5, 6$.
 
 When we ran the Skillings-Mack procedure, we found an asymptotic upper-tail probability of $0.0536 < 0.1 = \alpha$, and a Skillings-Mack SM test statistic of 7.6587 on 3 degrees of freedom. Given this, we concluded that there is a difference in the medians between at least one of the groups.
 
-In order to find which groups have a significant difference, we need to use an associated pairwise comparison procedure that can also be used against arbitrary incomplete block designs. To determine this, we created a novel pairwise multiple comparisons procedure that can be used on arbitrary incomplete block designs:
+In order to find which groups have a significant difference, we need to use an associated pairwise comparison procedure that can also be used against arbitrary incomplete block designs. To determine this, we used a novel pairwise multiple comparisons procedure that can be used on arbitrary incomplete block designs:^[This novel pairwise multiple comparisons procedure was created with the assistance of Dr. Erin Leatherman and Dr. Bradley Hartlaub, 2022.]
 
 1. Run a Wilcoxon rank-sum test on the data for all $6 = {4\choose2}$ treatment pairwise comparisons, where $H_0: F(t) = G(t)$ and $H_A: F(t) \neq G(t)$, where $F(t)$ represents the cumulative distribution function for one treatment, and $G(t)$ represents the cumulative distribution function for another treatment
 2. Keep the block and response values together, but randomly assign a new treatment for each observation, then calculate the Wilcoxon rank sum for all $6 = {4\choose2}$ treatment pairwise comparisons. This will spread the block effect across all treatments. Repeat this $r$ times, and store each of the test statistics for the pairwise comparisons for each of these tests.
@@ -152,7 +155,7 @@ We see that the spread for acetone reaches the lowest distance and has the lowes
 
 In retrospect, we should have designed our experiment to use a randomized complete block design, instead of an arbitrary incomplete block design. In a randomized complete block design, we would still have six blocks and four treatments, but each block would contain one observation for each of the possible treatments. This would have made our analysis easier. If our data had been collected as a randomized complete block design, we would have used the Friedman procedure for differences in medians using a randomized complete block design, and assuming a significant effect, we would have followed it up with the distribution-free, two-sided, all-treatments Wilcoxon, Nemenyi, McDonald-Thompson multiple comparisons procedure based on Friedman rank sums in a general configuration.
 
-However, we believe that the novel pairwise multiple comparisons procedure that we designed would still be valid given data obtained in an arbitrary incomplete block design. For example, suppose we were looking at data for a factory that produces products in batches, but which does not produce every batch every day. This would generate data in an arbitrary incomplete block design, where a metric of the product is the response, the batch is the treatment, and the day is the block. Using our procedure, we believe that we could diminish the block effect of days in the analysis and come up with an appropriate pairwise multiple comparison between the batches.
+However, we believe that the novel pairwise multiple comparisons procedure that we used would still be valid given data obtained in an arbitrary incomplete block design. For example, suppose we were looking at data for a factory that produces products in batches, but which does not produce every batch every day. This would generate data in an arbitrary incomplete block design, where a metric of the product is the response, the batch is the treatment, and the day is the block. Using our procedure, we believe that we could diminish the block effect of days in the analysis and come up with an appropriate pairwise multiple comparison between the batches.
 
 We believe that the results can be generalized to a wider population to what accelerants are the most dangerous for increasing flammability in traditionally flammable materials, like wood.
 
@@ -161,3 +164,6 @@ We believe that the results can be generalized to a wider population to what acc
 Our goal is to maximize the amount burnt, so the metric for success is to minimize the unburnt distance. We saw in the boxplot from Figure 5 that the best way to decrease unburnt distance is to use acetone. Table 1 tells us that there was no significant difference between acetone, dry, or isopropyl alcohol. Therefore, we recommend that to maximize the amount burnt, to soak birch popsicle sticks in acetone, isopropyl alcohol, or no accelerant at all.
 
 Based on this, we reject our original hypothesis that using any accelerant is better than no accelerant in favor of the theory that acetone and isopropyl alcohol burn just as well as no accelerant.
+
+## References
+
