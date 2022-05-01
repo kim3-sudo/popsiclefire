@@ -6,8 +6,8 @@
 fire <- read.csv(url("https://raw.githubusercontent.com/kim3-sudo/popsiclefire/main/data/data_filled.csv"))
 
 # Check conditions
-plot(aov(distance ~ type * run, data = fire), which = 1:2) # only to get residual plots
-plot(aov(distance ~ type * run, data = fire), which = 1:2) # only to get residual plots
+plot(aov(distance ~ type + run, data = fire), which = 1) # only to get residual plots
+plot(aov(distance ~ type + run, data = fire), which = 2) # only to get residual plots
 
 # Skillings-Mack's test!
 # This is an distribution-free test for general alternatives for data from an arbitrary incomplete block design (Hollander - Nonparametric Statistical Methods, 3ed, p. 343)
