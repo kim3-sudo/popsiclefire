@@ -27,13 +27,13 @@ Curiously, all three solutions had warnings on the bottles warning of the flamma
 
 ### Hypothesis
 
-If we soak popsicle sticks in ethanol alcohol, isopropyl alcohol, and acetone and burn them, comparing distance burned against a dry popsicle stick, then we think that using any liquid accelerant would be faster than no liquid accelerant. We also think that in comparing individual treatments, there would be no significant difference between the accelerants, but there would be a significant difference between no accelerant and with accelerant.
+If we soak popsicle sticks in acetone, ethanol alcohol, and isopropyl alcohol and burn them, comparing distance burned against a dry popsicle stick, then we think that using any liquid accelerant would be faster than no liquid accelerant. We also think that in comparing individual treatments, there would be no significant difference between the accelerants, but there would be a significant difference between no accelerant and with accelerant.
 
 ## Study Design and Procedure
 
 ### Experiment Setup
 
-For the experiment, we used birch wood popsicle sticks. We also prepared our treatments, which were the ethanol alcohol, isopropyl alcohol, acetone, and no accelerant. To hold the burning sticks off the ground (so they could be lit from below, since flames rise), we used four mason jars, one for each stick within a block. To light the sticks, we used a barbeque lighter, and for timing, we used an Apple iPhone. For safety purposes, we also had extra water.
+For the experiment, we used birch wood popsicle sticks. We also prepared our treatments, which were the acetone, ethanol alcohol, isopropyl alcohol, and no accelerant. To hold the burning sticks off the ground (so they could be lit from below, since flames rise), we used four mason jars, one for each stick within a block. To light the sticks, we used a barbecue lighter, and for timing, we used an Apple iPhone. For safety purposes, we also had extra water.
 
 We began by randomly assigning four treatments to each block using Python. We then filled plates with 100 milliliters of each of the three liquid accelerants, as well as drawing a line on the popsicle sticks at 90 millimeters. The line at 90 millimeters would indicate where the stick should be placed on the plate.
 
@@ -53,7 +53,7 @@ This method of block generation, however, means that it is possible to have mult
 
 ### Statistical Tools
 
-Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and Pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). The Skillings-Mack procedure was run in R using the NSM3 package version 1.16. The Wilcoxon rank-sum tests were run using the stats package in R.
+Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and Pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). The Skillings-Mack procedure was run in R using the NSM3 package, version 1.16. The Wilcoxon rank-sum tests were run using the stats package in R.
 
 ## Statistical Analysis
 
@@ -84,7 +84,7 @@ plot(aov(distance ~ type + run, data = fire), which = 2, main = "Figure 4: Norma
 
 In Figure 3, it is clear that there is a serious issue with the equal variance condition. There is a distinct "funnel" shape from left to right, where the variance at the fitted values around 80 to 90 are much larger than the variance at 105 to 110.
 
-In Figure 4, there are flaired tails that indicate an overdispersed data distribution compared to a normal distribution. That is, the distribution was "squished" toward the center compared to the normal distribution.
+In Figure 4, there are flared tails that indicate an overdispersed data distribution compared to a normal distribution. That is, the distribution was "squished" toward the center compared to the normal distribution.
 
 We attempted to fix the data shape using a data transformation, including the $y^2$, $y^3$, $\sqrt{y}$, and $\ln{y}$ transformations. However, none of these transformations changed the data enough to change the dispersion or the shape of the distribution to be more normal. Instead, we chose to use a non-parametric method instead. For the type of data, we chose to use the Skillings-Mack procedure. The Skillings-Mack procedure is a distribution free test for general alternatives for data from an arbitrary incomplete block design. This means that it can be used where there are missing observations in a single block. Its parametric cousin is the two-way ANOVA, and it can be used as a proxy for an overall F-test where the conditions are not met and the data are from an arbitrary incomplete block design.
 
@@ -101,11 +101,11 @@ The Skillings-Mack procedure requires that the $N$ random variables are mutually
 The hypotheses for the Skillings-Mack procedure are as follows:
 
 $$
-H_0: [\alpha_1 = \alpha_2 = \alpha_3 = \alpha_4],
+H_0: [\alpha_\text{acetone} = \alpha_\text{dry} = \alpha_\text{ethanol} = \alpha_\text{isopropyl}],
 $$
 
 $$
-H_A: [\alpha_1, \alpha_2, \alpha_3, \alpha_4 \text{ not all equal}],
+H_A: [\alpha_\text{acetone}, \alpha_\text{dry}, \alpha_\text{ethanol}, \alpha_\text{isopropyl} \text{ not all equal}],
 $$
 
 when $c_{ij} \equiv 1$, for $i = 1, 2, 3, 4$ and $j = 1, 2, 3, 4, 5, 6$.
@@ -126,7 +126,7 @@ We chose $r = 1000$ to ensure that we created a suitable distribution of random-
 
 We got the following comparisons table, which contains the cutoff values at an $\alpha$ level of 0.1.^[We use the $\frac{0.1}{6}$ and the $1 - \frac{0.1}{6}$, since these are the Bonferroni adjustments given six tests. Not using a Bonferroni adjustment makes the cutoff values for the 90% confidence interval simply $\frac{\alpha}{2}$ and $1 - \frac{\alpha}{2}$.] This is essentially a method to calculate the distance from the median and tell whether there is a significant difference between two groups.
 
-| Comparison        | Actual | Medians of Simulated U’s | $\frac{0.1}{6}$ Percentile | $1 - \frac{0.1}{6}$ Percentile |
+| Comparison        | Actual $U$ | Medians of Simulated $U$’s | $\frac{0.1}{6}$ Percentile | $1 - \frac{0.1}{6}$ Percentile |
 |-------------------|--------|--------------------------|----------------|-----------------|
 | Ethanol-Dry       | 2.5    | 18.5                     | 4.833333       | 30.66667        |
 | Ethanol-Acetone   | 2.0    | 18.0                     | 5.000000       | 30.50000        |
@@ -137,7 +137,7 @@ We got the following comparisons table, which contains the cutoff values at an $
 
 Table: Comparisons Table
 
-In Table 1, we found that the simulated U's are not statistically different from the actual U's for the acetone-dry, acetone-isopropyl, and isopropyl-dry combinations. This means that there is no statistically significant difference between the results for isopropyl alcohol, acetone, and no accelerant.
+In Table 1, we found that the simulated $U$'s are not statistically different from the actual $U$'s for the acetone-dry, acetone-isopropyl, and isopropyl-dry combinations. This means that there is no statistically significant difference between the results for isopropyl alcohol, acetone, and no accelerant.
 
 Based on this information, we generated a boxplot of just the unburnt distance by accelerant.
 
