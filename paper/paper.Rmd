@@ -46,7 +46,7 @@ For each block, we dipped the popsicle sticks in the indicated accelerant-filled
 
 The population under study consists of a sample of popsicle sticks made of birch wood. We cannot guarantee the randomness of the popsicle sticks out of the population of popsicle sticks that exist in the world (this would be impossible without exorbitant costs), but because of the relative similarity between popsicle sticks and consistency in runs, we believe that our experiment results will generalize to similar popsicle sticks, especially other sticks from the same package.
 
-This gives us a $4!$ experimental design, since we have four treatment effects and no other factors.
+This gives us a one-factor experimental design with four levels and a block.
 
 To ensure that we could find statistically significant results, we ran a power calculation. We assumed that we would use six time blocks, and we chose an alpha level for this of $\alpha = 0.05$, which is the probability of a Type I error (false rejection). We chose a Type II error probability of 0.1. Given a $k = 4$ (four treatments), the calculated sample size was 20, but given a $k = 6$ (six time blocks), our calculated sample size was 24. Given our two-way layout, we should take the larger $N$ calculated out of $k = 4, 6$. Based on this, we used $N = 24$, meaning that we should use 6 blocks of 4 observations each.
 
@@ -54,9 +54,22 @@ To generate the order in which we burnt our sticks, we used Python to generate a
 
 This method of block generation, however, means that it is possible to have multiple iterations of one treatment and none of other treatments in the same block. For example, it is possible to have "acetone", "acetone", "isopropyl", and "dry" in a single block, meaning that "ethanol" would not be tested in this block. This gives us arbitrary, unbalanced block data.
 
+The treatments for each block are given in Table 1.
+
+| Block | Treatments                             |
+|-------|----------------------------------------|
+| 1     | isopropyl, acetone, ethanol, acetone   |
+| 2     | ethanol, dry, acetone, ethanol         |
+| 3     | ethanol, isopropyl, isopropyl, dry     |
+| 4     | isopropyl, ethanol, acetone, isopropyl |
+| 5     | ethanol, acetone, dry, acetone         |
+| 6     | dry, isopropyl, dry, dry               |
+
+Table: Blocks and Treatments Table
+
 ### Statistical Tools
 
-Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and Pandas version 1.0.3. Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). The Skillings-Mack procedure was run in R using the NSM3 package, version 1.16. The Wilcoxon rank-sum tests were run using the stats package in R.
+Data were cleaned using Python version 3.7 (Python, Wilmington, DE) and Pandas version 1.0.3. [@vanrossum2009; @pandas2020] Data were analyzed using R version 4.0.3 (The R Project for Statistical Computing, Indianapolis, IN). [@R-base] The Skillings-Mack procedure was run in R using the NSM3 package, version 1.16. [@schneider2021] The Wilcoxon rank-sum tests were run using the stats package in R.
 
 ## Statistical Analysis
 
@@ -89,7 +102,7 @@ In Figure 3, it is clear that there is a serious issue with the equal variance c
 
 In Figure 4, there are flared tails that indicate an overdispersed data distribution compared to a normal distribution. That is, the distribution was "squished" toward the center compared to the normal distribution.
 
-We attempted to fix the data shape using a data transformation, including the $y^2$, $y^3$, $\sqrt{y}$, and $\ln{y}$ transformations. However, none of these transformations changed the data enough to change the dispersion or the shape of the distribution to be more normal. Instead, we chose to use a non-parametric method instead. For the type of data, we chose to use the Skillings-Mack procedure. The Skillings-Mack procedure is a distribution free test for general alternatives for data from an arbitrary incomplete block design. This means that it can be used where there are missing observations in a single block. Its parametric cousin is the two-way ANOVA, and it can be used as a proxy for an overall F-test where the conditions are not met and the data are from an arbitrary incomplete block design.
+We attempted to fix the data shape using a data transformation, including the $y^2$, $y^3$, $\sqrt{y}$, and $\ln{y}$ transformations. However, none of these transformations changed the data enough to change the dispersion or the shape of the distribution to be more normal. Instead, we chose to use a non-parametric method instead. For the type of data, we chose to use the Skillings-Mack procedure. [@hollander2013] The Skillings-Mack procedure is a distribution free test for general alternatives for data from an arbitrary incomplete block design. This means that it can be used where there are missing observations in a single block. Its parametric cousin is the two-way ANOVA, and it can be used as a proxy for an overall F-test where the conditions are not met and the data are from an arbitrary incomplete block design.
 
 Thus, our model is updated to
 
@@ -107,17 +120,17 @@ $$
 H_0: [\alpha_\text{acetone} = \alpha_\text{dry} = \alpha_\text{ethanol} = \alpha_\text{isopropyl}],
 $$
 
-$$
-H_A: [\alpha_\text{acetone}, \alpha_\text{dry}, \alpha_\text{ethanol}, \alpha_\text{isopropyl} \text{ not all equal}],
-$$
+and 
 
-when $c_{ij} \equiv 1$, for $i = 1, 2, 3, 4$ and $j = 1, 2, 3, 4, 5, 6$.
+$$
+H_A: [\alpha_\text{acetone}, \alpha_\text{dry}, \alpha_\text{ethanol}, \alpha_\text{isopropyl} \text{ not all equal}].
+$$
 
 When we ran the Skillings-Mack procedure, we found an asymptotic upper-tail probability of $0.0536 < 0.1 = \alpha$, and a Skillings-Mack SM test statistic of 7.6587 on 3 degrees of freedom. Given this, we concluded that there is a difference in the medians between at least one of the groups.
 
 In order to find which groups have a significant difference, we need to use an associated pairwise comparison procedure that can also be used against arbitrary incomplete block designs. To determine this, we used a novel pairwise multiple comparisons procedure that can be used on arbitrary incomplete block designs:^[This novel pairwise multiple comparisons procedure was created with the assistance of Dr. Erin Leatherman and Dr. Bradley Hartlaub, 2022.]
 
-1. Run a Wilcoxon rank-sum test on the data for all $6 = {4\choose2}$ treatment pairwise comparisons, where $H_0: F(t) = G(t)$ and $H_A: F(t) \neq G(t)$, where $F(t)$ represents the cumulative distribution function for one treatment, and $G(t)$ represents the cumulative distribution function for another treatment
+1. Run a Wilcoxon rank-sum test on the data for all $6 = {4\choose2}$ treatment pairwise comparisons, where $H_0: F(t) = G(t)$ and $H_A: F(t) \neq G(t)$, where $F(t)$ represents the cumulative distribution function for one treatment, and $G(t)$ represents the cumulative distribution function for another treatment [@hollander2013]
 2. Keep the block and response values together, but randomly assign a new treatment for each observation, then calculate the Wilcoxon rank sum for all $6 = {4\choose2}$ treatment pairwise comparisons. This will spread the block effect across all treatments. Repeat this $r$ times, and store each of the test statistics for the pairwise comparisons for each of these tests.
 3. For each of the six pairwise comparisons groups, compare the Bonferroni-adjusted \nth{5} and \nth{95} percentiles of the $r$ simulated random-treatment Wilcoxon rank-sum test statistics against the test statistic from each of the pairwise Wilcoxon tests from the actual data. If the actual Wilcoxon rank-sum test statistic falls inside of the Bonferroni-adjusted (0.05, 0.95) percentile from the random-treatment distribution, there is a significant difference between the two groups.
 
@@ -140,7 +153,7 @@ We got the following comparisons table, which contains the cutoff values at an $
 
 Table: Comparisons Table
 
-In Table 1, we found that the simulated $U$'s are not statistically different from the actual $U$'s for the acetone-dry, acetone-isopropyl, and isopropyl-dry combinations. This means that there is no statistically significant difference between the results for isopropyl alcohol, acetone, and no accelerant.
+In Table 2, we found that the simulated $U$'s are not statistically different from the actual $U$'s for the acetone-dry, acetone-isopropyl, and isopropyl-dry combinations. This means that there is no statistically significant difference between the results for isopropyl alcohol, acetone, and no accelerant.
 
 Based on this information, we generated a boxplot of just the unburnt distance by accelerant.
 
@@ -161,9 +174,13 @@ We believe that the results can be generalized to a wider population to what acc
 
 ## Conclusion
 
-Our goal is to maximize the amount burnt, so the metric for success is to minimize the unburnt distance. We saw in the boxplot from Figure 5 that the best way to decrease unburnt distance is to use acetone. Table 1 tells us that there was no significant difference between acetone, dry, or isopropyl alcohol. Therefore, we recommend that to maximize the amount burnt, to soak birch popsicle sticks in acetone, isopropyl alcohol, or no accelerant at all.
+Our goal is to maximize the amount burnt, so the metric for success is to minimize the unburnt distance. We saw in the boxplot from Figure 5 that the best way to decrease unburnt distance is to use acetone. Table 2 tells us that there was no significant difference between acetone, dry, or isopropyl alcohol. Therefore, we recommend that to maximize the amount burnt, to soak birch popsicle sticks in acetone, isopropyl alcohol, or no accelerant at all.
 
 Based on this, we reject our original hypothesis that using any accelerant is better than no accelerant in favor of the theory that acetone and isopropyl alcohol burn just as well as no accelerant.
+
+## Availability
+
+The code and data are open-source and are available at \href{https://github.com/kim3-sudo/popsiclefire}{https://github.com/kim3-sudo/popsiclefire}.
 
 ## References
 
